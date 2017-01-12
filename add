@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+# CGI block
+import cgi, cgitb ; cgitb.enable()
+print ('Content-Type: application/json\nAccess-Control-Allow-Origin: *\n' )
+import sqlite3, json, os, sys, urllib
+conn = sqlite3.connect('myprof.db')
+from re import sub
+from decimal import Decimal
+
+form = cgi.FieldStorage()
+
+p = {}
+ret = {}
+
+def money(m):
+  return float(Decimal(sub(r'[^\d.]', '', m)))
+
+try:
+  school = urllib.parse.unquote(form['school'].value)
+  fn = urllib.parse.unquote(form['first'].value)
+  ln = urllib.parse.unquote(form['last'].value)
+  title = urllib.parse.unquote(form['title'].value)
+  salary = urllib.parse.unquote(form['salary'].value)
+  taxable = urllib.parse.unquote(form['taxable'].value)
+  year = urllib.parse.unquote(form['year'].value)
+
+  salary = money(salary)
+  taxable = money(taxable)
+
+  cmd="INSERT INTO profs (school, first, last, title, salary, taxable, year) VALUES('{}', '{}', '{}', '{}', {}, {}, '{}')"
+  sql = cmd.format(school, fn, ln, title, float(salary), float(taxable), year)
+  c = conn.cursor()
+  c.execute(sql)
+  conn.commit()
+  conn.close()
+  print(200)
+  #jobj =  {'status': 200,'school':school, 'title': title,'salary': salary, 'year':year, 'ln': ln, 'fn': fn}
+
+except Exception as e:
+  exc_type, exc_obj, exc_tb = sys.exc_info()
+  fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+  #jobj = {'efname': str(fname), 'elineno': str(exc_tb.tb_lineno) , 'error': str(e), 'status': 500}
+  print(500)
+
+#j = json.dumps(jobj)
+
+#print(j)

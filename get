@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+# CGI block
+import cgi, cgitb ; cgitb.enable()
+print ('Content-Type: application/json\nAccess-Control-Allow-Origin: *\n' )
+import sqlite3, json, os, sys
+conn = sqlite3.connect('myprof.db')
+
+form = cgi.FieldStorage()
+
+terms = []
+
+try:
+  yearquery = 'year="{}"'.format(form['year'].value)
+  terms.append(yearquery)
+except:
+  pass
+
+try:
+  schoolquery = 'school like "%{}%"'.format(form['school'].value)
+  terms.append(schoolquery)
+except:
+  pass
+
+try:
+  lastnamequery = 'last like "%{}%"'.format(form['last'].value)
+  terms.append(lastnamequery)
+except:
+  pass
+
+
+try:
+  firstnamequery = 'first like "%{}%"'.format(form['first'].value)
+  terms.append(firstnamequery)
+except:
+  pass
+
+try:
+  minsalquery = 'salary >= {}'.format(form['min'].value)
+  terms.append(minsalquery)
+except:
+  pass
+
+try:
+  titlequery = 'title like "%{}%"'.format(form['title'].value)
+  terms.append(titlequery)
+except:
+  pass
+
+
+Query = " and ".join(terms)
+
+try:
+  sql = 'select * from profs where {};'.format(Query)
+  c = conn.cursor()
+  res = c.execute(sql)
+
+  rows = []
+  rowDict = {}
+  for r in res:
+    rowDict = {'id': r[0], 'school': r[1], 'first':r[2], 'last': r[3], 'title': r[4], 'salary': r[5], 'taxable': r[6], 'year':r[7]}
+    rows.append(rowDict)
+  count = len(rows)
+  jobj =  {'status': 200, 'count': count, 'rows': rows}
+  conn.close()
+except Exception as e:
+  exc_type, exc_obj, exc_tb = sys.exc_info()
+  fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+  jobj = {'efname': str(fname), 'elineno': str(exc_tb.tb_lineno) , 'error': str(e), 'status': 500}
+
+
+j = json.dumps(jobj)
+
+print(j)

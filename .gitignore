@@ -1,0 +1,7 @@
+*.db
+*.pyc
+*.save
+*~
+*out
+out*
+temp*
