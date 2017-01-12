@@ -50,6 +50,13 @@ except:
 
 Query = " and ".join(terms)
 
+if len(terms) == 0:
+  jobj = {'status': 405, 'error': 'request must include at least one query'}
+  j = json.dumps(jobj)
+  print(j)
+  sys.exit(2)
+
+
 try:
   sql = 'select * from profs where {};'.format(Query)
   c = conn.cursor()

@@ -16,8 +16,7 @@ Data is populated by the [scraper](https://github.com/openciti/sunshinelistscrap
 
 > min: minimum salary
 
-> last: partial last nam
-e  
+> last: partial last name  
 
 > first: partial first name
 
