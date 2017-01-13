@@ -8,6 +8,9 @@ Data is populated by the [scraper](https://github.com/openciti/sunshinelistscrap
 
 /add?first=Ronald+R.&school=Brock+University&last=McTavish&year=1996&salary=%24127%2C785.54&title=Dean%2C+Business&taxable=%24298.20
 
+NOTE: after uploading years from 1996 to 2015 the add service was disabled for public use
+
+
 ### get info
 
 /get?
