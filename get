@@ -9,10 +9,14 @@ conn = sqlite3.connect('myprof.db')
 form = cgi.FieldStorage()
 
 terms = []
-
 try:
-  yearquery = 'year="{}"'.format(form['year'].value)
-  terms.append(yearquery)
+  y = form['year'].value
+  if '-' in y:
+    years = y.split('-')
+    yearquery ='(year >="{}" and year <="{}")'.format(years[0], years[1])
+  else:
+    yearquery = 'year={}'.format(form['year'].value)
+  terms.append(yearsquery)
 except:
   pass
 
