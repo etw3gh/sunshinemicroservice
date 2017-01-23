@@ -8,6 +8,8 @@ conn = sqlite3.connect('myprof.db')
 
 form = cgi.FieldStorage()
 
+yerr = ''
+
 terms = []
 try:
   y = form['year'].value
@@ -15,9 +17,10 @@ try:
     years = y.split('-')
     yearquery ='(year >="{}" and year <="{}")'.format(years[0], years[1])
   else:
-    yearquery = 'year={}'.format(form['year'].value)
-  terms.append(yearsquery)
-except:
+    yearquery = 'year={}'.format(y)
+  terms.append(yearquery)
+except Exception as err:
+  yerr = str(err)
   pass
 
 try:
@@ -62,18 +65,23 @@ if len(terms) == 0:
 
 
 try:
-  sql = 'select * from profs where {};'.format(Query)
+  sql = 'select distinct school, first, last, title, salary, taxable, year from profs where {};'.format(Query)
   c = conn.cursor()
   res = c.execute(sql)
 
   rows = []
   rowDict = {}
   for r in res:
-    rowDict = {'id': r[0], 'school': r[1], 'first':r[2], 'last': r[3], 'title': r[4], 'salary': r[5], 'taxable': r[6], 'year':r[7]}
+    rowDict = {'school': r[0], 'first':r[1], 'last': r[2], 'title': r[3], 'salary': r[4], 'taxable': r[5], 'year':r[6]}
     rows.append(rowDict)
   count = len(rows)
   jobj =  {'status': 200, 'count': count, 'rows': rows}
+
+  if yerr != '':
+    jobj['yerr'] = yerr
+
   conn.close()
+
 except Exception as e:
   exc_type, exc_obj, exc_tb = sys.exc_info()
   fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
