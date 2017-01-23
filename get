@@ -30,14 +30,14 @@ except:
   pass
 
 try:
-  lastnamequery = 'last like "%{}%"'.format(form['last'].value)
+  lastnamequery = 'last like "{}%"'.format(form['last'].value)
   terms.append(lastnamequery)
 except:
   pass
 
 
 try:
-  firstnamequery = 'first like "%{}%"'.format(form['first'].value)
+  firstnamequery = 'first like "{}%"'.format(form['first'].value)
   terms.append(firstnamequery)
 except:
   pass
