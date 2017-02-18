@@ -34,7 +34,7 @@ NOTE: after uploading years from 1996 to 2015 the add service was disabled for p
 
 people making at least $150,055 at any school with 'toronto' in its name, with first name containig 'dav' for the year 2000 
 
-http://openciti.ca/cgi-bin/mp/get?year=2000&first=dav&school=toronto&min=150555
+https://openciti.ca/cgi-bin/mp/get?year=2000&first=dav&school=toronto&min=150555
 
 `
 {
